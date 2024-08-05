@@ -1,4 +1,4 @@
 # Installation Guide
-cd fims-web
-npm install
-npm start
+1. cd fims-web
+2. npm install
+3. npm start
