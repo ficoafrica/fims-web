@@ -1,11 +1,11 @@
 import React from "react";
-import VerifyEmail from "./pages/auth/VerifyEmail";
+import Workspace from "./pages/auth/Workspace";
 
 
 function App() {
   return (
     <React.Fragment>
-      <VerifyEmail/>
+      <Workspace/>
     </React.Fragment>
   );
 }

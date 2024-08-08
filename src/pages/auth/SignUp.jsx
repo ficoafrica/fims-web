@@ -1,8 +1,8 @@
 import React from 'react'
 import logo from '../../assets/logo.png';
-import getStarted from '../../assets/get-started.jpg'
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
+import GetStarted from '../../components/auth/GetStarted';
 
 const SignUp = () => {
   return (
@@ -16,7 +16,7 @@ const SignUp = () => {
             <form>
               <div className='mb-2 flex flex-col'>
                 <label className='text-sm mb-2 font-medium' htmlFor="name">Full Name</label>
-                <input className='p-1 border border-gray-300 text-sm rounded-md focus:outline-[#43A047]' type="email" name="email"/>
+                <input className='p-1 border border-gray-300 text-sm rounded-md focus:outline-[#43A047]' type="name" name="name"/>
               </div>
               <div className='mb-2 flex flex-col'>
                 <label className='text-sm mb-2 font-medium' htmlFor="email">Email Address</label>
@@ -51,14 +51,7 @@ const SignUp = () => {
         </div>
       </div>
 
-      <div id='img-container' className='h-screen relative'>
-        <img className='object-cover h-full w-full' src={getStarted} alt="get_started" />
-        <div className='bg-[#43A047]/[.70] absolute h-full w-full top-0 left-0 flex justify-center items-center'>
-          <span className='w-3/4 border-y border-white py-8'>
-            <p className='text-white text-5xl font-bold tracking-wide leading-[60px]'>Get Started on your farm management</p>
-          </span>
-        </div>
-      </div>
+      <GetStarted/>
     </section>
   )
 }
