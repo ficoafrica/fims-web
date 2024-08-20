@@ -1,11 +1,11 @@
 import React from "react";
-import Workspace from "./pages/auth/Workspace";
 
+import Routing from "./utils/Routing";
 
 function App() {
   return (
     <React.Fragment>
-      <Workspace/>
+      <Routing/>
     </React.Fragment>
   );
 }
