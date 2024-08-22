@@ -13,43 +13,43 @@ export const links = [
     id : 1,
     name: "Dashboard",
     icon : <BiSolidHome size={16}/>,
-    link : "/"
+    link : "/dashboard/"
   },
   {
     id : 2,
     name: "User Management",
     icon : <FaUser size={16}/>,
-    link : '/user-management'
+    link : '/user-management/'
   },
   {
     id : 3,
     name: "Supply Management",
     icon : <TbTruckDelivery size={16}/>,
-    link : '/supply-management'
+    link : '/supply-management/'
   },
   {
     id : 4,
     name: "Livestock Inventory",
     icon : <GiAnimalHide size={16}/>,
-    link : '/livestock-inventory'
+    link : '/livestock-inventory/'
   },
   {
     id : 5,
     name: "Crop Management",
     icon : <PiPottedPlantBold size={16}/>,
-    link : '/crop-management'
+    link : '/crop-management/'
   },
   {
     id : 6,
     name: "Reporting and Analytics",
     icon :  <MdAnalytics size={16}/>,
-    link : "/report"
+    link : "/report-analytics/"
   },
   {
     id : 7,
     name: "Climate Gauge",
     icon : <TiWeatherCloudy size={16}/>,
-    link : '/climate-guage'
+    link : '/climate-guage/'
   },
 ]
 

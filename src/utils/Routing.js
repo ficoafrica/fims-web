@@ -1,5 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import ProtectedRoute from './ProtectedRoute';
+import PublicRoute from './PublicRoute';
 
 // Pages
 import SignIn from '../pages/auth/SignIn';
@@ -14,30 +16,39 @@ import CropMgt from '../pages/crop/CropMgt';
 import Report from '../pages/report/Report';
 import Climate from '../pages/climate/Climate';
 
+import { AuthProvider } from '../context/AuthContext';
+
+
 const Routing = () => {
+
   return (
     <Router>
+      <AuthProvider>
       <Routes>
-      
-        {/* Dashboard Routes */}
-        <Route exact path='/' element={<Dashboard/>} />
-        {/* Dashboard Routes */}
-
-        <Route path='/user-management' element={<UserMgt/>}/>
-        
-        <Route path='/supply-management' element={<SupplyMgt/>}/>
-        <Route path='/livestock-inventory' element={<Livestock/>}/>
-        <Route path='/crop-management' element={<CropMgt/>}/>
-        <Route path='/report' element={<Report/>}/>
-        <Route path='/climate-guage' element={<Climate/>}/>
+        <Route element={<ProtectedRoute/>}>
+          <Route path='/auth/workspace' element={<Workspace/>}/>
+          {/* Dashboard Routes */}
+          <Route exact path='/' element={<Navigate to="/auth/workspace"/>} />
+          {/* Dashboard Routes */}
+          <Route path='/dashboard/:id' element={<Dashboard/>}/>
+          <Route path='/user-management/:id' element={<UserMgt/>}/>
+          
+          <Route path='/supply-management/:id' element={<SupplyMgt/>}/>
+          <Route path='/livestock-inventory/:id' element={<Livestock/>}/>
+          <Route path='/crop-management/:id' element={<CropMgt/>}/>
+          <Route path='/report-analytics/:id' element={<Report/>}/>
+          <Route path='/climate-guage/:id' element={<Climate/>}/>
+        </Route>
 
         {/* Auth Routes */}
-        <Route path='/auth/signin' element={<SignIn/>}/>
-        <Route path='/auth/signup' element={<SignUp/>}/>
-        <Route path='/auth/verify-email' element={<VerifyEmail/>}/>
-        <Route path='/auth/workspace' element={<Workspace/>}/>
+        <Route element={<PublicRoute/>}>
+          <Route path='/auth/signin' element={<SignIn/>}/>
+          <Route path='/auth/signup' element={<SignUp/>}/>
+          <Route path='/auth/verify-email' element={<VerifyEmail/>}/>
+        </Route>
         {/* Auth Routes */}
       </Routes>
+      </AuthProvider>
     </Router>
   )
 }
