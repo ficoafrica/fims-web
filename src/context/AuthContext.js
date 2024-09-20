@@ -1,8 +1,9 @@
 import React, {useState, useContext, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setLoggedIn, setUser, setHasFarms, setFarms, setActiveFarm, setFirstVisit } from '../store/auth/authSlice';
+import { setLoggedIn, setUser, setHasFarms, setFarms, setActiveFarm, setFirstVisit, setLoad, resetAuth } from '../store/auth/authSlice';
 import authFetch from '../services/axios';
+import { toast } from 'react-toastify';
 
 const AuthContext = React.createContext();
 
@@ -21,6 +22,7 @@ const userRoles = {
   },
 }
 
+
 const AuthProvider = ({children}) => {
   const [loading, setLoading] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
@@ -29,15 +31,14 @@ const AuthProvider = ({children}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
   const signUp = async(formData) =>{
     const {name, email, password, password2} = formData;
     setLoading(true)
     if (password !== password2){
-      console.log("Passwords don't match")
+      toast.error("Passwords don't match")
       setLoading(false)
     } else if (password.length < 8){
-      console.log("Password must have 8 characters")
+      toast.error("Password must have 8 characters")
       setLoading(false)
     } else {
       try {
@@ -47,7 +48,7 @@ const AuthProvider = ({children}) => {
           dispatch(setLoggedIn(true))
           dispatch(setUser(res.data.data))
           dispatch(setHasFarms(false))
-          console.log("User created")
+          toast.success("User created")
           localStorage.setItem('access', res.data.token.access);
           localStorage.setItem('refresh', res.data.token.refresh);
           localStorage.setItem('user', JSON.stringify(res.data.data));
@@ -55,7 +56,7 @@ const AuthProvider = ({children}) => {
         }
       } catch (err) {
         setLoading(false)
-        console.log(err.response?.data.error)
+        toast.error(err.response?.data.error)
       }
     }
   }
@@ -66,10 +67,10 @@ const AuthProvider = ({children}) => {
       setLoading(true)
       let res = await authFetch.post('account/login/', formData)
       if(res.data.success){
-          setLoading(false)
+          setLoading(false);
+          toast.success("User Logged In")
           dispatch(setLoggedIn(true))
           dispatch(setUser(res.data.data))
-          console.log("User created")
           localStorage.setItem('access', res.data.token.access);
           localStorage.setItem('refresh', res.data.token.refresh);
           localStorage.setItem('user', JSON.stringify(res.data.data));
@@ -77,7 +78,25 @@ const AuthProvider = ({children}) => {
       }
     } catch (err){
         setLoading(false)
-        console.log(err.response?.data.error)
+        toast.error("Email or Password is invalid")
+    }
+  }
+
+  const signOut = async() =>{
+    try{
+      let refresh = localStorage.getItem('refresh');
+      let res = await authFetch.post('account/logout/', {refresh_token: refresh})
+      if(res) {
+        localStorage.removeItem('access')
+        localStorage.removeItem('refresh')
+        localStorage.removeItem('user')
+        localStorage.removeItem('farms')
+        dispatch(resetAuth())
+        toast.warn("Logged out")
+        navigate('/auth/signin')
+      }
+    } catch (error){
+      console.log(error.response)
     }
   }
 
@@ -90,7 +109,7 @@ const AuthProvider = ({children}) => {
         setLoading(false)
         dispatch(setFarms([res.data.data]))
         localStorage.setItem('farms', JSON.stringify({farm: [res.data.data]}))
-        console.log(res.data.message)
+        toast.success(`Welcome to ${res.data.data.name}`)
         navigate(`/dashboard/${res.data.data.id}`)
       }
     } catch (error) {
@@ -129,9 +148,11 @@ const AuthProvider = ({children}) => {
         console.log(res.data.message)
         dispatch(setActiveFarm(id))
         dispatch(setFirstVisit(false))
+        dispatch(setLoad(false))
         if (clicked) {
           navigate(`/dashboard/${id}`)
           setLoading(false)
+          toast.success("Welcome")
         } else {
           dispatch(setHasFarms(true))
           setLoadLayout(false)
@@ -178,6 +199,7 @@ const AuthProvider = ({children}) => {
       value={{
         signIn,
         signUp,
+        signOut,
         loading,
         isLoading,
         viewFarm,

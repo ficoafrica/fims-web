@@ -5,6 +5,7 @@ const initialState = {
   hasFarm: true,
   activeFarm: "",
   firstVisit: true,
+  load: true,
   farms: [],
   user: {},
 }
@@ -30,11 +31,23 @@ const authSlice = createSlice({
     },
     setFirstVisit:(state,action)=>{
       state.firstVisit = action.payload
+    },
+    setLoad:(state,action)=>{
+      state.load = action.payload
+    },
+    resetAuth:(state)=>{
+      state.isLoggedIn = false;
+      state.hasFarm = true;
+      state.activeFarm = "";
+      state.firstVisit = true;
+      state.load = true;
+      state.farms = [];
+      state.user = {};
     }
   }
 });
 
-export const { setLoggedIn, setUser, setHasFarms, setFarms, setActiveFarm, setFirstVisit } = authSlice.actions;
+export const { setLoggedIn, setUser, setHasFarms, setFarms, setActiveFarm, setFirstVisit, setLoad, resetAuth } = authSlice.actions;
 
 export default authSlice.reducer;
 

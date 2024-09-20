@@ -3,13 +3,15 @@ import Header from './Header'
 import Sidebar from './Sidebar'
 import { useAuthContext } from '../../context/AuthContext'
 import { useParams } from 'react-router-dom';
-import LoadWorkspace from '../loaders/LoadWorkspace';
+import LoadSidebar from '../loaders/LoadSidebar';
 import { useSelector } from 'react-redux';
+import LoadHeader from '../loaders/LoadHeader';
+
 
 const Layout = ({ children }) => {
   let {loadLayout, viewFarm} = useAuthContext();
   let {id} = useParams();
-  let {firstVisit} = useSelector((state)=> state.auth)
+  let {firstVisit, load} = useSelector((state)=> state.auth)
 
   useEffect(()=>{
     if (firstVisit){
@@ -20,12 +22,12 @@ const Layout = ({ children }) => {
   return (
     <section className='flex flex-row'>
       <aside className='h-screen overflow-y-auto w-1/4 bg-[#43A047]/[.10]'>
-        {loadLayout ? (<LoadWorkspace/>) : (<Sidebar/>)}
+        {loadLayout || load ? (<LoadSidebar/>) : (<Sidebar/>)}
       </aside>
       <div className='w-3/4'>
-        {loadLayout ? (<LoadWorkspace/>) : (<Header/>)}
+        {loadLayout || load ? (<LoadHeader/>) : (<Header/>)}
         <main>
-          {loadLayout ? null : children}
+          {loadLayout || load ? null : children}
         </main>
       </div>
     </section>

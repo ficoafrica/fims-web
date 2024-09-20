@@ -23,9 +23,9 @@ authFetch.interceptors.response.use((response) => {
       return Promise.reject(error);
     }
 
-    if(error.response.status === 401 && originalRequest.url === env.baseURL + 'token/refresh/'){
-      window.location.href = '/auth/signin';
-      return Promise.reject(error);
+    if(error.response.status === 401 && originalRequest.url === 'token/refresh/'){
+      console.log('Duplicate Request Terminated')
+      return Promise.reject(new Error('Terminating Duplicate Requests'));
     }
 
     if(error.response.data.detail === "Authentication credentials were not provided." && error.response.status === 401 && error.response.statusText === 'Unauthorized'){
@@ -38,7 +38,8 @@ authFetch.interceptors.response.use((response) => {
       }
       }
 
-    if(error.response.data.code === 'token_not_valid' && error.response.status === 401 && error.response.statusText === 'Unauthorized'){
+    if(error.response.data.code === 'token_not_valid' && error.response.status === 401 && error.response.statusText === 'Unauthorized' && originalRequest.url !== 'token/refresh/'){
+      console.log(originalRequest.url)
       const refreshToken = localStorage.getItem('refresh');
       
       if(refreshToken){
@@ -48,7 +49,7 @@ authFetch.interceptors.response.use((response) => {
 
         if (tokenParts.exp > now) {
           try {
-            const response = await authFetch.post('/token/refresh/', { refresh: refreshToken });
+            const response = await authFetch.post('token/refresh/', { refresh: refreshToken });
             localStorage.setItem('access', response.data.access);
             localStorage.setItem('refresh', response.data.refresh);
 
