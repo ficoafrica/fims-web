@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from '../../assets/logo.png';
-import { links, otherLinks } from '../../data/data';
+import { links, otherLinks } from '../../data/Data';
 import { useSelector } from 'react-redux';
 import { useAuthContext } from '../../context/AuthContext';
 
