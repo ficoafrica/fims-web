@@ -37,6 +37,15 @@ authFetch.interceptors.response.use((response) => {
         console.log(err);
       }
       }
+    
+    if (error.response.data.code === "user_not_found" && error.response.status === 401){
+        localStorage.removeItem('access');
+        localStorage.removeItem('refresh');
+        localStorage.removeItem('user');
+        localStorage.removeItem('farms');
+        window.location.href = '/auth/signin';
+    }
+    
 
     if(error.response.data.code === 'token_not_valid' && error.response.status === 401 && error.response.statusText === 'Unauthorized' && originalRequest.url !== 'token/refresh/'){
       console.log(originalRequest.url)

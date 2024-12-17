@@ -16,7 +16,7 @@ import CropMgt from '../pages/crop/CropMgt';
 import Report from '../pages/report/Report';
 import Climate from '../pages/climate/Climate';
 
-import { AuthProvider } from '../context/AuthContext';
+import { AuthProvider } from '../context/AuthContext'
 
 
 const Routing = () => {
@@ -27,12 +27,12 @@ const Routing = () => {
       <Routes>
         <Route element={<ProtectedRoute/>}>
           <Route path='/auth/workspace' element={<Workspace/>}/>
-          {/* Dashboard Routes */}
           <Route exact path='/' element={<Navigate to="/auth/workspace"/>} />
-          {/* Dashboard Routes */}
+        </Route>
+
+        <Route element={<ProtectedRoute layout={true} />}>
           <Route path='/dashboard/:id' element={<Dashboard/>}/>
           <Route path='/user-management/:id' element={<UserMgt/>}/>
-          
           <Route path='/supply-management/:id' element={<SupplyMgt/>}/>
           <Route path='/livestock-inventory/:id' element={<Livestock/>}/>
           <Route path='/crop-management/:id' element={<CropMgt/>}/>

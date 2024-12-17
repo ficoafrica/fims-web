@@ -42,7 +42,7 @@ const AuthProvider = ({children}) => {
       setLoading(false)
     } else {
       try {
-        let res = await authFetch.post('account/create-manager/', {email, username: name, password, role: userRoles.manager.id})
+        let res = await authFetch.post('account/create-manager', {email, username: name, password, role: userRoles.manager.name})
         if(res.data.success){
           setLoading(false)
           dispatch(setLoggedIn(true))
@@ -56,7 +56,7 @@ const AuthProvider = ({children}) => {
         }
       } catch (err) {
         setLoading(false)
-        toast.error(err.response?.data.error)
+        toast.error(err.response?.data.message)
       }
     }
   }
@@ -65,7 +65,7 @@ const AuthProvider = ({children}) => {
   const signIn = async(formData) =>{
     try{
       setLoading(true)
-      let res = await authFetch.post('account/login/', formData)
+      let res = await authFetch.post('account/login', formData)
       if(res.data.success){
           setLoading(false);
           toast.success("User Logged In")
@@ -85,7 +85,7 @@ const AuthProvider = ({children}) => {
   const signOut = async() =>{
     try{
       let refresh = localStorage.getItem('refresh');
-      let res = await authFetch.post('account/logout/', {refresh_token: refresh})
+      let res = await authFetch.post('account/logout', {refresh_token: refresh})
       if(res) {
         localStorage.removeItem('access')
         localStorage.removeItem('refresh')
@@ -104,7 +104,7 @@ const AuthProvider = ({children}) => {
   const createFarms = async(formData) =>{
     try {
       setLoading(true)
-      let res = await authFetch.post('farm/create-farm/', formData)
+      let res = await authFetch.post('farm/create-farm', formData)
       if(res.data.success){
         setLoading(false)
         dispatch(setFarms([res.data.data]))
@@ -114,7 +114,7 @@ const AuthProvider = ({children}) => {
       }
     } catch (error) {
       setLoading(false)
-      console.log(error.response?.data.error)
+      console.log(error.response?.data.message)
     }
   }
 
@@ -122,7 +122,7 @@ const AuthProvider = ({children}) => {
   const getFarms = async() =>{
     try {
       setIsLoading(true);
-      let res = await authFetch('farm/get-farms/')
+      let res = await authFetch('farm/farms')
       if(res.data.success){
         setIsLoading(false)
         if (res.data.data.length > 0){
@@ -134,7 +134,7 @@ const AuthProvider = ({children}) => {
       }
     } catch (error) {
       setIsLoading(false)
-      console.log(error.response?.data.error)
+      console.log(error.response?.data.message)
     }
   }
 
@@ -143,7 +143,7 @@ const AuthProvider = ({children}) => {
     try {
       setLoadLayout(clicked ? false : true)
       setLoading(clicked ? true : false)
-      let res = await authFetch(`farm/view-farm/${id}/`)
+      let res = await authFetch(`farm/farm/${id}`)
       if (res.data.success){
         console.log(res.data.message)
         dispatch(setActiveFarm(id))
@@ -159,7 +159,7 @@ const AuthProvider = ({children}) => {
         }
       }
     } catch(error) {
-      console.log(error.response?.data.error)
+      console.log(error.response?.data.message)
       navigate('/auth/workspace')
       setLoadLayout(false)
     }
@@ -191,6 +191,7 @@ const AuthProvider = ({children}) => {
 
   useEffect(()=>{
     initUser()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
